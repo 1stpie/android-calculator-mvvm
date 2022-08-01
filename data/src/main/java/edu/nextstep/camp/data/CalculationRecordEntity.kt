@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 import edu.nextstep.camp.domain.calculator.Expression
 
 @Entity(
-    tableName = "expression_records",
+    tableName = "calculation_records",
 )
-internal data class ExpressionRecordEntity(
+internal data class CalculationRecordEntity(
     @ColumnInfo(name = "expression") val expression: Expression,
     @ColumnInfo(name = "result") val result: Int,
     @PrimaryKey(autoGenerate = true) val id: Int = 0

@@ -17,7 +17,7 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
 
     private fun createCalculatorViewModel(): CalculatorViewModel {
         return CalculatorViewModel(
-            expressionRecordsRepository = Injector.provideRecordsRepository(context)
+            calculationRecordsRepository = Injector.provideRecordsRepository(context)
         )
     }
 }

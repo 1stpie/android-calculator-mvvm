@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import edu.nextstep.camp.calculator.databinding.ActivityCalculatorBinding
 import edu.nextstep.camp.domain.calculator.Expression
-import edu.nextstep.camp.domain.calculator.ExpressionRecord
+import edu.nextstep.camp.domain.calculator.CalculationRecord
 
 class CalculatorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCalculatorBinding
@@ -39,7 +39,7 @@ class CalculatorActivity : AppCompatActivity() {
         }
     }
 
-    private fun showCalculatorHistory(expressions: List<ExpressionRecord>) {
+    private fun showCalculatorHistory(expressions: List<CalculationRecord>) {
         binding.textView.text = expressions.joinToString("\n")
     }
 

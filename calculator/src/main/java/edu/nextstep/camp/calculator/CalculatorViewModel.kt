@@ -5,22 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.nextstep.camp.domain.calculator.*
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CalculatorViewModel(
     private val calculator: Calculator = Calculator(),
     private var expression: Expression = Expression.EMPTY,
-    private var isDisplayingExpressionHistory: Boolean = false,
-    private val expressionRecordsRepository: ExpressionRecordsRepository,
-    coroutineScope: CoroutineScope? = null
+    private var isShowingHistory: Boolean = false,
+    private val calculationRecordsRepository: CalculationRecordsRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
-
-    private val coroutineScope = coroutineScope ?: viewModelScope
 
     private val _onState = MutableLiveData<Event<CalculatorState>>()
     val onState: LiveData<Event<CalculatorState>> get() = _onState
-
 
     fun onEvent(event: CalculatorEvent) {
         when (event) {
@@ -37,13 +35,13 @@ class CalculatorViewModel(
     }
 
     private fun sendShowExpressionState() {
-        isDisplayingExpressionHistory = false
+        isShowingHistory = false
         sendViewState(CalculatorState.ShowExpression(expression))
     }
 
     private fun sendLoadedCalculatorRecordsState() {
-        coroutineScope.launch {
-            expressionRecordsRepository.loadExpressionRecords().let {
+        viewModelScope.launch(dispatcher) {
+            calculationRecordsRepository.loadCalculationRecords().let {
                 CalculatorState.LoadedCalculatorHistory(it)
             }.run {
                 sendViewState(this)
@@ -52,11 +50,11 @@ class CalculatorViewModel(
     }
 
     private fun eventToggleCalculatorHistory() {
-        if (isDisplayingExpressionHistory) {
+        if (isShowingHistory) {
             sendShowExpressionState()
         } else {
             sendLoadedCalculatorRecordsState()
-            isDisplayingExpressionHistory = true
+            isShowingHistory = true
         }
     }
 
@@ -80,16 +78,16 @@ class CalculatorViewModel(
         if (result == null) {
             sendViewState(CalculatorState.ShowIncompleteExpressionError)
         } else {
-            saveCalculatorResult(result)
+            saveCalculatorResult(expression, result)
             expression = Expression(listOf(result))
             sendViewState(CalculatorState.ShowResult(result))
         }
     }
 
-    private fun saveCalculatorResult(result: Int) {
-        coroutineScope.launch {
-            expressionRecordsRepository.saveExpressionRecord(
-                ExpressionRecord(expression, result)
+    private fun saveCalculatorResult(expression: Expression, result: Int) {
+        viewModelScope.launch(dispatcher) {
+            calculationRecordsRepository.saveCalculationRecord(
+                CalculationRecord(expression, result)
             )
         }
     }

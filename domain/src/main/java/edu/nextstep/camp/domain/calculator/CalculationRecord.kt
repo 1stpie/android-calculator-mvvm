@@ -1,6 +1,6 @@
 package edu.nextstep.camp.domain.calculator
 
-data class ExpressionRecord(
+data class CalculationRecord(
     val expression: Expression,
     val result: Int
 ) {

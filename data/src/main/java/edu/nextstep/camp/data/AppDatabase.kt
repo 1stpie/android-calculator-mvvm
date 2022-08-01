@@ -7,11 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import edu.nextstep.camp.utilities.DATABASE_NAME
 
-@Database(entities = [ExpressionRecordEntity::class], version = 1)
+@Database(entities = [CalculationRecordEntity::class], version = 1)
 @TypeConverters(Converters::class)
 internal abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun expressionRecordDao(): ExpressionRecordsDao
+    abstract fun calculationRecordDao(): CalculationRecordsDao
 
     companion object {
 

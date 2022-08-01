@@ -1,13 +1,13 @@
 package edu.nextstep.camp.data
 
 import android.content.Context
-import edu.nextstep.camp.domain.calculator.ExpressionRecordsRepository
+import edu.nextstep.camp.domain.calculator.CalculationRecordsRepository
 
 object Injector {
-    fun provideRecordsRepository(context: Context): ExpressionRecordsRepository {
-        return AppDatabase.getInstance(context).expressionRecordDao()
+    fun provideRecordsRepository(context: Context): CalculationRecordsRepository {
+        return AppDatabase.getInstance(context).calculationRecordDao()
             .let {
-                ExpressionRecordsRepositoryImpl(it)
+                CalculationRecordsRepositoryImpl(it)
             }
     }
 }
